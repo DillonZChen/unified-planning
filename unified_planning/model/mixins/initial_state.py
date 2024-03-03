@@ -103,7 +103,8 @@ class InitialStateMixin:
                     res[f_exp] = self.initial_value(f_exp)
                 except UPProblemDefinitionError:
                     # hack for the case when the initial value is not set
-                    warnings.warn("Initial value not set for " + str(f_exp), RuntimeWarning)
+                    # warnings.warn("Initial value not set for " + str(f_exp), RuntimeWarning)
+                    pass
         return res
 
     @property
