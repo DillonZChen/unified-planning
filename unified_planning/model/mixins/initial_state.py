@@ -13,6 +13,7 @@
 # limitations under the License.
 #
 
+import warnings
 from typing import Union, Dict, Any
 
 import unified_planning as up
@@ -98,7 +99,11 @@ class InitialStateMixin:
         res = self._initial_value
         for f in self._fluent_set.fluents:
             for f_exp in get_all_fluent_exp(self._object_set, f):
-                res[f_exp] = self.initial_value(f_exp)
+                try:
+                    res[f_exp] = self.initial_value(f_exp)
+                except UPProblemDefinitionError:
+                    # hack for the case when the initial value is not set
+                    warnings.warn("Initial value not set for " + str(f_exp), RuntimeWarning)
         return res
 
     @property
