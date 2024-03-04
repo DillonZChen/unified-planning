@@ -52,16 +52,32 @@ class FNode(object):
     # issue since, by default, equality coincides with identity.
     def __hash__(self) -> int:
         return self._node_id
+    
+    def get_leaf_args(self) -> List["FNode"]:
+        assert self.is_le() or self.is_lt() or self.is_equals()
+        exp = repr(self)
+        for tok in ["[", "]", "-", "+", "*", "/", "==", "<="]:
+            exp = exp.replace(tok, "")
+        toks = exp.split(" ")
+        ret = [tok for tok in toks if tok != "" and not tok.isnumeric()]
+        return ret
 
-    def get_nary_expression_string(self, op: str, args: List["FNode"]) -> str:
+
+    def get_nary_expression_string(self, op: str, args: List["FNode"], fluent: bool=False) -> str:
         p = []
+        if fluent:
+            l_brk = "("
+            r_brk = ")"
+        else:
+            l_brk = "["
+            r_brk = "]"
         if len(args) > 0:
-            p.append("(")
+            p.append(l_brk)
             p.append(str(args[0]))
             for x in args[1:]:
                 p.append(op)
                 p.append(str(x))
-            p.append(")")
+            p.append(r_brk)
         return "".join(p)
 
     def __repr__(self) -> str:
@@ -72,7 +88,7 @@ class FNode(object):
         elif self.is_real_constant():
             return str(self.constant_value())
         elif self.is_fluent_exp():
-            return self.fluent().name + self.get_nary_expression_string(", ", self.args)
+            return self.fluent().name + self.get_nary_expression_string(", ", self.args, fluent=True)
         elif self.is_dot():
             return f"{self.agent()}.{self.arg(0)}"
         elif self.is_parameter_exp():
