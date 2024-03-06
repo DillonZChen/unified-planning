@@ -1639,7 +1639,7 @@ class PDDLReader:
         :param problem_filename: Optionally the path to the file containing the `PDDL` problem.
         :return: The `Problem` parsed from the given pddl domain + problem.
         """
-        with open(domain_filename, "r") as domain_file:
+        with open(domain_filename, "r", encoding="utf-8") as domain_file:
             domain_str = domain_file.read()
 
         problem_str = None
