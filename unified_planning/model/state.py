@@ -15,6 +15,7 @@
 
 from abc import ABC, abstractmethod
 from typing import Dict, List, Optional, Tuple
+
 import unified_planning as up
 from unified_planning.exceptions import UPUsageError, UPValueError
 
@@ -69,13 +70,17 @@ class UPState(State):
             self._ancestors = _father._ancestors + 1
 
     def __repr__(self) -> str:
+        return str(self.get_value_dict)
+    
+    def get_value_dict(self) -> Dict["up.model.FNode", "up.model.FNode"]:
         current_instance: Optional[UPState] = self
         mappings: Dict["up.model.FNode", "up.model.FNode"] = {}
         while current_instance is not None:
             for k, v in current_instance._values.items():
                 mappings.setdefault(k, v)
             current_instance = current_instance._father
-        return str(mappings)
+        return mappings
+
 
     def get_value(self, fluent: "up.model.FNode") -> "up.model.FNode":
         """
