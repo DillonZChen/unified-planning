@@ -70,7 +70,7 @@ class UPState(State):
             self._ancestors = _father._ancestors + 1
 
     def __repr__(self) -> str:
-        return str(self.get_value_dict)
+        return str(self.get_value_dict())
     
     def get_value_dict(self) -> Dict["up.model.FNode", "up.model.FNode"]:
         current_instance: Optional[UPState] = self
