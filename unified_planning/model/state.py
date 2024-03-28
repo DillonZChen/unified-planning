@@ -17,6 +17,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, List, Optional, Tuple
 
 import unified_planning as up
+from unified_planning.environment import get_environment
 from unified_planning.exceptions import UPUsageError, UPValueError
 
 
@@ -97,6 +98,8 @@ class UPState(State):
             if value_found is not None:
                 return value_found
             current_instance = current_instance._father
+        # HACK!
+        return get_environment().expression_manager.Int(0)
         raise UPUsageError(
             f"The state {self} does not have a value for the value {fluent}"
         )
